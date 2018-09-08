@@ -1,0 +1,149 @@
+NR-SNMP-MIB DEFINITIONS ::= BEGIN
+    
+IMPORTS
+	enterprises,
+	MODULE-IDENTITY,
+	OBJECT-TYPE,
+	Counter32, Gauge32, Counter64, Integer32, TimeTicks,
+	NOTIFICATION-TYPE
+		FROM SNMPv2-SMI
+	OBJECT-GROUP,
+	NOTIFICATION-GROUP
+		FROM SNMPv2-CONF;
+
+newrelicRegMIB MODULE-IDENTITY
+	LAST-UPDATED "201805230052Z"	-- May 23, 2018 12:52:00 AM
+	ORGANIZATION ""
+	CONTACT-INFO
+		""
+	DESCRIPTION
+		""
+	REVISION "201805230052Z"	-- May 23, 2018 12:52:00 AM
+	DESCRIPTION
+		"Initial version."
+	-- 1.3.6.1.4.1.52032
+	::= { enterprises 52032 }
+
+
+newrelicObjects OBJECT IDENTIFIER 
+	-- 1.3.6.1.4.1.52032.1
+	::= { newrelicRegMIB 1 }
+	
+--
+-- top level structure
+--
+newrelicExampleScalars       OBJECT IDENTIFIER ::= { newrelicObjects 1 }
+newrelicExampleTables        OBJECT IDENTIFIER ::= { newrelicObjects 2 }
+
+--
+-- Example scalars
+--
+
+newrelicExampleInteger OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+	"This is a simple object which merely houses a writable
+	 integer.  It's only purposes is to hold the value of a single
+	 integer."
+    DEFVAL { 42 }
+    ::= { newrelicExampleScalars 1 }
+
+newrelicExampleSleeper OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+	"This is a simple object which is a basic integer.  It's value
+	 indicates the number of seconds that the agent will take in
+	 responding to requests of this object."
+    DEFVAL { 1 }
+    ::= { newrelicExampleScalars 2 }
+
+newrelicExampleString OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+	"This is a simple object which merely houses a writable
+	 string.  It's only purposes is to hold the value of a single
+	 string.  Writing to it will simply change the value for
+	 subsequent GET/GETNEXT/GETBULK retrievals."
+    DEFVAL { "So long, and thanks for all the fish!" }
+    ::= { newrelicExampleScalars 3 }
+ 
+ 
+ --
+--  Example Tables
+--
+
+--
+-- A simple table 
+--   
+--
+
+cityWeatherTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF CityWeatherEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+	"An example table that provides city weather information"
+    ::= { newrelicExampleTables 1 }
+
+cityWeatherEntry OBJECT-TYPE
+    SYNTAX      CityWeatherEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+	"A table row"
+    INDEX   { cityName }
+    ::= { cityWeatherTable 1 }
+
+CityWeatherEntry ::= SEQUENCE {
+    cityName		OCTET STRING,
+    temperature  	Gauge32,
+    humidity      	Gauge32,
+    wind      		Gauge32,
+    windDirection   OCTET STRING
+}
+
+cityName OBJECT-TYPE
+    SYNTAX      OCTET STRING (SIZE(0..64))
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+	"A city for which weather data is available."
+    ::= { cityWeatherEntry 1 }
+
+temperature OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"The current temperature for the city."
+    ::= { cityWeatherEntry 2 }
+
+humidity OBJECT-TYPE
+    SYNTAX      Gauge32
+    MAX-ACCESS  read-create
+    STATUS      current
+    DESCRIPTION
+	"The current humidity level for the city."
+    ::= { cityWeatherEntry 3 }
+
+wind OBJECT-TYPE
+    SYNTAX       Gauge32
+    MAX-ACCESS   read-create
+    STATUS       current
+    DESCRIPTION "The current wind speed for the city."
+    ::= { cityWeatherEntry 4 }
+
+windDirection OBJECT-TYPE
+    SYNTAX       OCTET STRING (SIZE(0..64))
+    MAX-ACCESS   read-create
+    STATUS       current
+    DESCRIPTION "The current direction of the wind for the city."
+    ::= { cityWeatherEntry 5 }
+ 
+ END
