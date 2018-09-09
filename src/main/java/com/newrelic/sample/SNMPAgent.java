@@ -206,7 +206,7 @@ public class SNMPAgent extends BaseAgent {
 		columns.add(new MOColumn(3, SMIConstants.SYNTAX_GAUGE32,MOAccessImpl.ACCESS_READ_ONLY));
 		columns.add(new MOColumn(4, SMIConstants.SYNTAX_GAUGE32,MOAccessImpl.ACCESS_READ_ONLY));
 		columns.add(new MOColumn(5, SMIConstants.SYNTAX_OCTET_STRING,MOAccessImpl.ACCESS_READ_ONLY));
-		
+		columns.add(new MOColumn(6, SMIConstants.SYNTAX_OCTET_STRING,MOAccessImpl.ACCESS_READ_ONLY));
 		DefaultMOTable ifTable = new DefaultMOTable(tableRootOid, indexDef,
 				columns.toArray(new MOColumn[0]));
 		MOMutableTableModel model = (MOMutableTableModel) ifTable.getModel();
@@ -220,6 +220,7 @@ public class SNMPAgent extends BaseAgent {
 		firstRow[2] = new Gauge32(24);
 		firstRow[3] = new Gauge32(12);
 		firstRow[4] = new OctetString("south by south east");
+		firstRow[5] = new OctetString("UK");
 		model.addRow( new DefaultMOMutableRow2PC( new OID( String.valueOf(rowNumber)), firstRow));
 		
 		Variable[] secondRow = new Variable[columns.size()];
@@ -229,8 +230,18 @@ public class SNMPAgent extends BaseAgent {
 		secondRow[2] = new Gauge32(24);
 		secondRow[3] = new Gauge32(6);
 		secondRow[4] = new OctetString("north by north west");
+		secondRow[5] = new OctetString("USA");
 		model.addRow( new DefaultMOMutableRow2PC( new OID( String.valueOf(rowNumber)), secondRow));
 
+		Variable[] thirdRow = new Variable[columns.size()];
+		rowNumber = 3;
+		thirdRow[0] = new OctetString("Boston");
+		thirdRow[1] = new Gauge32(54);
+		thirdRow[2] = new Gauge32(5);
+		thirdRow[3] = new Gauge32(15);
+		thirdRow[4] = new OctetString("north");
+		thirdRow[5] = new OctetString("UK");
+		model.addRow( new DefaultMOMutableRow2PC( new OID( String.valueOf(rowNumber)), thirdRow));
 		//
 		ifTable.setVolatile(true);
 		agent.registerManagedObject(ifTable);
