@@ -192,6 +192,10 @@ public class SNMPAgent extends BaseAgent {
 				MOAccessImpl.ACCESS_READ_ONLY, new OctetString("a newrelic sample agent"));
 		agent.registerManagedObject(descriptionMO);
 		
+		//ratingMO
+		MOScalar<OctetString> ratingMO = new MOScalar<OctetString>(new OID(".1.3.6.1.4.1.52032.1.1.4.0"), 
+				MOAccessImpl.ACCESS_READ_ONLY, new OctetString("1.0.0"));
+		agent.registerManagedObject(ratingMO);
 		
 		// build a table. 
 		OID tableRootOid = new OID(".1.3.6.1.4.1.52032.1.2.1.1");
