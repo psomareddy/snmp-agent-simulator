@@ -188,7 +188,7 @@ public class SNMPAgent extends BaseAgent {
     }
 
 	public static void main(String[] args) throws Exception {
-		SNMPAgent agent = new SNMPAgent("0.0.0.0/9161");
+		final SNMPAgent agent = new SNMPAgent("0.0.0.0/9161");
 		agent.init();
 		agent.addShutdownHook();
 		agent.getServer().addContext(new OctetString("public"));
@@ -197,6 +197,17 @@ public class SNMPAgent extends BaseAgent {
 		agent.sendColdStartNotification();
 		createManagedObjects(agent);
 		System.out.println("Agent running...");
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+
+			@Override
+			public void run() {
+				System.out.println("Shutting down!");
+				agent.stop();
+			}
+			
+		});
+		
 		while (true) {
 			incidents = incidents + 1;
 			incidentCountMO.setValue(new Counter32(incidents));

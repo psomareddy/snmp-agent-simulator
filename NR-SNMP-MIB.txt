@@ -50,14 +50,13 @@ newrelicExampleInteger OBJECT-TYPE
     DEFVAL { 42 }
     ::= { newrelicExampleScalars 1 }
 
-newrelicExampleSleeper OBJECT-TYPE
+newrelicExampleCount OBJECT-TYPE
     SYNTAX      Integer32
     MAX-ACCESS  read-write
     STATUS      current
     DESCRIPTION
-	"This is a simple object which is a basic integer.  It's value
-	 indicates the number of seconds that the agent will take in
-	 responding to requests of this object."
+	"This is a simple object which is a basic counter.  It's value
+	 increments each time this oid is requested."
     DEFVAL { 1 }
     ::= { newrelicExampleScalars 2 }
 
